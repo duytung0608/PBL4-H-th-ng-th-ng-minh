@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "name": "pbl4",
+    "slug": "pbl4",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "plugins": ["expo-image-picker"]
+  },
+  "name": "pbl4"
+}

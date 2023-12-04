@@ -1,9 +1,19 @@
-import { Button, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View, Image, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
-import Icon from 'react-native-vector-icons/AntDesign'
-import Icons from 'react-native-vector-icons/Ionicons'
+import {
+    Button,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableWithoutFeedback,
+    View,
+    Image,
+    TouchableOpacity,
+    FlatList,
+} from 'react-native';
+import React, { useState } from 'react';
+import Icon from 'react-native-vector-icons/AntDesign';
+import Icons from 'react-native-vector-icons/Ionicons';
 
-const ContentHistory = () => {
+const ContentHistory = ({ navigation }) => {
     const handleIconPress = () => {
         // Xử lý khi biểu tượng được nhấn
         alert('Icon đã được nhấn!');
@@ -23,11 +33,68 @@ const ContentHistory = () => {
             setIsFocused(false);
         }
     };
+
+    const goCamera = () => {
+        navigation.navigate('Home');
+    };
+
+    const dataFake = [
+        {
+            id: 1,
+            name: 'Cay Lua',
+            benh: 'Loai benh',
+            image: 'https://firebasestorage.googleapis.com/v0/b/baith-e7c12.appspot.com/o/img_benh-dao-on-tren-lua.png?alt=media&token=31c1f98b-1f02-49b6-8a54-c8618c1a2f57',
+        },
+        {
+            id: 2,
+            name: 'Cay Lua',
+            benh: 'Loai benh',
+            image: 'https://firebasestorage.googleapis.com/v0/b/baith-e7c12.appspot.com/o/img_benh-dao-on-tren-lua.png?alt=media&token=31c1f98b-1f02-49b6-8a54-c8618c1a2f57',
+        },
+        {
+            id: 3,
+            name: 'Cay Lua',
+            benh: 'Loai benh',
+            image: 'https://firebasestorage.googleapis.com/v0/b/baith-e7c12.appspot.com/o/img_benh-dao-on-tren-lua.png?alt=media&token=31c1f98b-1f02-49b6-8a54-c8618c1a2f57',
+        },
+        {
+            id: 4,
+            name: 'Cay Lua',
+            benh: 'Loai benh',
+            image: 'https://firebasestorage.googleapis.com/v0/b/baith-e7c12.appspot.com/o/img_benh-dao-on-tren-lua.png?alt=media&token=31c1f98b-1f02-49b6-8a54-c8618c1a2f57',
+        },
+        {
+            id: 5,
+            name: 'Cay Lua',
+            benh: 'Loai benh',
+            image: 'https://firebasestorage.googleapis.com/v0/b/baith-e7c12.appspot.com/o/img_benh-dao-on-tren-lua.png?alt=media&token=31c1f98b-1f02-49b6-8a54-c8618c1a2f57',
+        },
+        {
+            id: 6,
+            name: 'Cay Lua',
+            benh: 'Loai benh',
+            image: 'https://firebasestorage.googleapis.com/v0/b/baith-e7c12.appspot.com/o/img_benh-dao-on-tren-lua.png?alt=media&token=31c1f98b-1f02-49b6-8a54-c8618c1a2f57',
+        },
+        {
+            id: 7,
+            name: 'Cay Lua',
+            benh: 'Loai benh',
+            image: 'https://firebasestorage.googleapis.com/v0/b/baith-e7c12.appspot.com/o/img_benh-dao-on-tren-lua.png?alt=media&token=31c1f98b-1f02-49b6-8a54-c8618c1a2f57',
+        },
+        {
+            id: 8,
+            name: 'Cay Lua',
+            benh: 'Loai benh',
+            image: 'https://firebasestorage.googleapis.com/v0/b/baith-e7c12.appspot.com/o/img_benh-dao-on-tren-lua.png?alt=media&token=31c1f98b-1f02-49b6-8a54-c8618c1a2f57',
+        },
+    ];
     return (
         <View style={styles.body}>
             <View style={styles.search_header}>
                 <TouchableWithoutFeedback>
-                    <TextInput style={styles.search_text} placeholderTextColor='#ABABAB'
+                    <TextInput
+                        style={styles.search_text}
+                        placeholderTextColor="#ABABAB"
                         placeholder={isFocused ? '' : 'Nhập tên loại cây, loại bệnh ...'} // Hiển thị placeholder tùy thuộc vào trạng thái isFocused
                         // ... các thuộc tính khác
                         onChangeText={(text) => setInputValue(text)}
@@ -42,43 +109,26 @@ const ContentHistory = () => {
             </View>
 
             <View style={styles.search_list}>
-                <View style={styles.search_item}>
-                    <Image style={styles.item_img} source={require('../../assets/IMG_PBL/benh_img.jpg')} />
-                    <View style={styles.item_content}>
-                        <Text style={styles.content_header}>Loại cây</Text>
-                        <Text style={styles.content_header}>Loại bệnh</Text>                       
-                    </View>
-                </View>
-
-                <View style={styles.search_item}>
-                    <Image style={styles.item_img} source={require('../../assets/IMG_PBL/benh_img.jpg')} />
-                    <View style={styles.item_content}>
-                        <Text style={styles.content_header}>Loại cây</Text>
-                        <Text style={styles.content_header}>Loại bệnh</Text>                       
-                    </View>
-                </View>
-                <View style={styles.search_item}>
-                    <Image style={styles.item_img} source={require('../../assets/IMG_PBL/benh_img.jpg')} />
-                    <View style={styles.item_content}>
-                        <Text style={styles.content_header}>Loại cây</Text>
-                        <Text style={styles.content_header}>Loại bệnh</Text>                       
-                    </View>
-                </View>
-                <View style={styles.search_item}>
-                    <Image style={styles.item_img} source={require('../../assets/IMG_PBL/benh_img.jpg')} />
-                    <View style={styles.item_content}>
-                        <Text style={styles.content_header}>Loại cây</Text>
-                        <Text style={styles.content_header}>Loại bệnh</Text>                       
-                    </View>
-                </View>
+                <FlatList
+                    data={dataFake}
+                    renderItem={({ item }) => (
+                        <View style={styles.search_item}>
+                            <Image style={styles.item_img} source={{ uri: item.image }} />
+                            <View style={styles.item_content}>
+                                <Text style={styles.content_header}>{item.name}</Text>
+                                <Text style={styles.content_header}>{item.benh}</Text>
+                            </View>
+                        </View>
+                    )}
+                />
             </View>
 
-            <Icons style={styles.btn_search} name="add-circle" size={80} onPress={() => alert('Chuyển sang trang HomeCamera')}/>
+            <Icons style={styles.btn_search} name="add-circle" size={80} onPress={goCamera} />
         </View>
-    )
-}
+    );
+};
 
-export default ContentHistory
+export default ContentHistory;
 
 const styles = StyleSheet.create({
     body: {
@@ -89,23 +139,24 @@ const styles = StyleSheet.create({
     },
     search_header: {
         flexDirection: 'row',
-        width: "90%",
+        width: '90%',
         backgroundColor: '#E0DEDE',
         paddingHorizontal: 15,
         paddingVertical: 5,
         borderRadius: 50,
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
     },
 
     search_text: {
         marginLeft: 10,
         fontSize: 17,
         color: '#00000',
-        width: '80%'
+        width: '80%',
     },
     search_list: {
         marginVertical: 10,
-        width: '90%'
+        width: '90%',
+        height: 500,
     },
     search_item: {
         backgroundColor: '#F6F0E2',
@@ -117,25 +168,21 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: 'flex-start',
         marginTop: 10,
-
     },
     item_img: {
         width: 60,
         height: 60,
         borderRadius: 10,
-
     },
 
     item_content: {
         marginLeft: 10,
-        flexDirection: 'column'
+        flexDirection: 'column',
     },
     content_header: {
         fontSize: 20,
         fontWeight: '600',
         color: '#15504A',
-
-
     },
     content_body: {
         flexDirection: 'row',
@@ -149,13 +196,11 @@ const styles = StyleSheet.create({
     body_value: {
         fontWeight: '600',
         fontSize: 16,
-
     },
     btn_search: {
-       color: '#50D2C2',
+        color: '#50D2C2',
         position: 'absolute',
         right: '10%',
         top: '100%',
     },
-
 });

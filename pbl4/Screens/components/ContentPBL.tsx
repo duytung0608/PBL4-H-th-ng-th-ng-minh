@@ -1,8 +1,8 @@
-import { NavigationProp } from "@react-navigation/native";
-import React from "react"
-import { StyleSheet, View, Text, Image, Button, TouchableOpacity } from "react-native";
+import { NavigationProp } from '@react-navigation/native';
+import React from 'react';
+import { StyleSheet, View, Text, Image, Button, TouchableOpacity } from 'react-native';
 
-const ContentPBL = ({navigation}) => {
+const ContentPBL = ({ navigation }) => {
     return (
         <>
             <View style={styles.body}>
@@ -11,7 +11,9 @@ const ContentPBL = ({navigation}) => {
                 </View>
 
                 <View style={styles.content_title}>
-                    <Text style={styles.title}>TTNQ là công cụ tra cứu bệnh và nguyên nhân gây bệnh ở cây nông nghiệp</Text>
+                    <Text style={styles.title}>
+                        TTNQ là công cụ tra cứu bệnh và nguyên nhân gây bệnh ở cây nông nghiệp
+                    </Text>
                 </View>
                 <View>
                     <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CreateAccount')}>
@@ -21,7 +23,7 @@ const ContentPBL = ({navigation}) => {
                 <View style={styles.titleLast}>
                     <Text style={{ fontSize: 20 }}> Đã có tài khoản?</Text>
                     <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
-                        <Text style={{ fontSize: 20, fontWeight: 'bold', }} >  Login</Text>
+                        <Text style={{ fontSize: 20, fontWeight: 'bold' }}> Login</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -31,7 +33,7 @@ const ContentPBL = ({navigation}) => {
 
 const styles = StyleSheet.create({
     body: {
-        backgroundColor: '#F4F4F4',
+        backgroundColor: '#FFFF',
         paddingHorizontal: 20,
 
         paddingTop: 40,
@@ -40,7 +42,6 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
         height: '100%',
-
     },
     content_img: {
         width: '70%',
@@ -51,12 +52,11 @@ const styles = StyleSheet.create({
 
     content_title: {
         paddingVertical: 60,
-
     },
     title: {
         fontSize: 30,
         fontWeight: '600',
-        textAlign: 'center'
+        textAlign: 'center',
     },
     button: {
         width: 320,

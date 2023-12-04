@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { StyleSheet, View, Text, SafeAreaView, TouchableOpacity, TextInput, Alert } from "react-native";
-import Icon from "react-native-vector-icons/AntDesign"
+import React, { useState } from 'react';
+import { StyleSheet, View, Text, SafeAreaView, TouchableOpacity, TextInput, Alert } from 'react-native';
+import Icon from 'react-native-vector-icons/AntDesign';
 // import { FIREBASE_AUTH } from "../../firebase";
 // import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
 type ContentSingInProps = {
     title: string;
-    navigation: any,
-}
+    navigation: any;
+};
 const ContentSignIn = ({ title, navigation }: ContentSingInProps) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -29,30 +29,29 @@ const ContentSignIn = ({ title, navigation }: ContentSingInProps) => {
         // } finally {
         //     setLoading(false);
         // }
-    }
-
-
+        alert('dang nhap thanh cong => chuyen sang trang home camera');
+    };
 
     const onSubmit = () => {
         let formData = {
             _email: email,
             _pass: password,
-        }
-        let regexEmail = new RegExp("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])");
+        };
+        let regexEmail = new RegExp(
+            '(?:[a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*|"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])'
+        );
         if (!regexEmail.test(formData._email)) {
             setCheckEmail(false);
-        }
-        else {
+        } else {
             setCheckEmail(true);
         }
         formData._pass === '' ? setErrorPass('Pass không để rỗng') : setErrorPass('');
-        if (checkEmail === false || formData._pass !== '') {
-            navigation.navigate('Home');
-        }
-        else {
+        if (checkEmail === true || formData._pass !== '') {
+            navigation.navigate('BottomTabs');
+        } else {
             Alert.alert('Nhap lai!!!');
         }
-    }
+    };
 
     return (
         <>
@@ -70,28 +69,38 @@ const ContentSignIn = ({ title, navigation }: ContentSingInProps) => {
                     <View style={styles.group}>
                         <Text style={styles.txt}>Email</Text>
                         <View style={styles.Input}>
-                            <TextInput placeholder="quyen@gmail.com" style={styles.InputTxt} onChangeText={(value) => setEmail(value)}></TextInput>
+                            <TextInput
+                                placeholder="quyen@gmail.com"
+                                style={styles.InputTxt}
+                                onChangeText={(value) => setEmail(value)}
+                            ></TextInput>
                         </View>
                     </View>
                     <View style={styles.group}>
                         <Text style={styles.txt}>Password</Text>
                         <View style={styles.Input}>
-                            <TextInput placeholder="Nhập mật khẩu" style={styles.InputTxt} secureTextEntry={true} onChangeText={(value) => setPassword(value)}></TextInput>
+                            <TextInput
+                                placeholder="Nhập mật khẩu"
+                                style={styles.InputTxt}
+                                secureTextEntry={true}
+                                onChangeText={(value) => setPassword(value)}
+                            ></TextInput>
                             <TouchableOpacity style={styles.InputIcon} onPress={() => alert('Hien mat khau')}>
-                                <Text ><Icon name="eye" size={30} /></Text>
+                                <Text>
+                                    <Icon name="eye" size={30} />
+                                </Text>
                             </TouchableOpacity>
                         </View>
                         <View style={styles.titleLast}>
                             <Text style={{ fontSize: 16 }}> Quên mật khẩu?</Text>
                             <TouchableOpacity onPress={() => alert('Chuyen sang trang login')}>
-                                <Text style={{ fontSize: 16, fontWeight: 'bold', }} > Đặt lại mật khẩu</Text>
+                                <Text style={{ fontSize: 16, fontWeight: 'bold' }}> Đặt lại mật khẩu</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
 
-
-                    <View >
-                        <TouchableOpacity style={styles.button} onPress={signIn}>
+                    <View>
+                        <TouchableOpacity style={styles.button} onPress={onSubmit}>
                             <Text style={styles.btnText}>{title}</Text>
                         </TouchableOpacity>
                     </View>
@@ -99,14 +108,14 @@ const ContentSignIn = ({ title, navigation }: ContentSingInProps) => {
                     <View style={styles.titleLast}>
                         <Text style={{ fontSize: 20 }}> Chưa có tài khoản?</Text>
                         <TouchableOpacity onPress={() => navigation.navigate('CreateAccount')}>
-                            <Text style={{ fontSize: 20, fontWeight: 'bold', }} > Đăng kí</Text>
+                            <Text style={{ fontSize: 20, fontWeight: 'bold' }}> Đăng kí</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
             </View>
         </>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -117,20 +126,16 @@ const styles = StyleSheet.create({
     },
     content_title: {
         flexDirection: 'row',
-
     },
     headerTitle: {
         fontSize: 30,
         fontWeight: '600',
         marginLeft: '30%',
     },
-    form: {
-
-    },
+    form: {},
     group: {
         paddingLeft: 20,
         paddingVertical: 15,
-
     },
     txt: {
         fontSize: 20,
@@ -145,12 +150,11 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         flexDirection: 'row',
         alignContent: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
     },
     InputTxt: {
         fontSize: 20,
         width: '90%',
-
     },
     InputIcon: {
         marginTop: 10,
@@ -163,7 +167,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: 30,
-        marginLeft: '10%'
+        marginLeft: '10%',
     },
     btnText: {
         fontSize: 25,
@@ -173,7 +177,7 @@ const styles = StyleSheet.create({
     titleLast: {
         marginVertical: 20,
         flexDirection: 'row',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
 });
 

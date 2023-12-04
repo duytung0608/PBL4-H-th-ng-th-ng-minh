@@ -8,36 +8,40 @@ import Search from './Screens/home/Search';
 import History from './Screens/home/History';
 import Profile from './Screens/home/Profile';
 import HomeCamera from './Screens/home/HomeCamera';
-
-
+import { NavigationContainer } from '@react-navigation/native';
+import CreateAccount from './Screens/home/CreateAccount';
+import SignIn from './Screens/home/SignIn';
+import BottomTabs from './Screens/home/BottomTabs';
 
 const Stack = createNativeStackNavigator();
 
-
 export default function App() {
-  return (
-    <>
-      {/* <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name='LoginScreen' component={LoginScreen} options={{headerShown: false}}/>
-          <Stack.Screen name='HomeItem' component={HomeItem} options={{headerShown: false}}/>
-        </Stack.Navigator>
-      </NavigationContainer> */}
+    return (
+        <>
+            <NavigationContainer>
+                <Stack.Navigator>
+                    <Stack.Screen name="LoginScreen" component={LoginScreen} options={{ headerShown: false }} />
+                    <Stack.Screen name="CreateAccount" component={CreateAccount} options={{ headerShown: false }} />
+                    <Stack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }} />
+                    <Stack.Screen name="BottomTabs" component={BottomTabs} options={{ headerShown: false }} />
+                </Stack.Navigator>
+            </NavigationContainer>
 
-      {/* <Profile /> */}
-      {/* <History /> */}
-      {/* <Search /> */}
-      <HomeCamera />
-      {/* <HomeItem /> */}
-    </>
-  );
+            {/* <Profile /> */}
+            {/* <History /> */}
+            {/* <Search /> */}
+            {/* <HomeCamera /> */}
+            {/* <HomeItem /> */}
+            {/* <LoginScreen /> */}
+        </>
+    );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+    container: {
+        flex: 1,
+        backgroundColor: '#FFFF',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 });

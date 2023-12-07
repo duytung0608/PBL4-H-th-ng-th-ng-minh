@@ -4,16 +4,19 @@ import Icon from 'react-native-vector-icons/Fontisto';
 import { launchCameraAsync, launchImageLibraryAsync } from 'expo-image-picker';
 import { Camera } from 'expo-camera';
 import axios from 'axios';
-import RNFetchBlob from 'react-native-fetch-blob';
+// import { RNFS } from 'react-native-fs';
 
+// import RNFetchBlob from 'react-native-fetch-blob';
 const ContentHomeCamera = ({ navigation }) => {
+    const [base64, setBase64] = useState('');
     const [img, setImg] = useState('');
     const requsetCameraPermission = async () => {
         try {
             const { status } = await Camera.requestPermissionsAsync();
             if (status === 'granted') {
                 // Nếu đã có quyền truy cập, mở camera
-                const result = await launchCameraAsync();
+                const result: any = await launchCameraAsync();
+                setBase64(result.assets[0]);
                 console.log(result.assets[0].uri);
                 setImg(result.assets[0].uri);
             } else {
@@ -33,23 +36,26 @@ const ContentHomeCamera = ({ navigation }) => {
             // mo thu vien
             const album: any = await launchImageLibraryAsync();
             console.log(album.assets[0].uri);
+            setBase64(album.assets[0]);
             setImg(album.assets[0].uri);
         } catch (error) {
             console.log(error);
         }
     };
 
-    const getImageBase64 = async (img) => {
-        const response = await RNFetchBlob.fetch('GET', img);
-        const base64Image = response.base64();
-        return base64Image;
-    };
+    // // chuyển ảnh sang base64Image  => bị lỗi
+    // const getImageBase64 = async (img) => {
+    //     const response = await RNFetchBlob.fetch('GET', img);
+    //     const base64Image = response.base64();
+    //     return base64Image;
+    // };
+
     const uploadImage = async (img) => {
         try {
             // Tạo đối tượng FormData để chứa dữ liệu
             const formData = new FormData();
             // Chuyển đổi đường link ảnh sang base64
-            const base64Image = await getImageBase64(img);
+            // const base64Image = await getImageBase64(img);
             // Thêm ảnh vào FormData
             formData.append('image', {
                 uri: img,
@@ -59,15 +65,15 @@ const ContentHomeCamera = ({ navigation }) => {
 
             // Sử dụng Axios để thực hiện HTTP request
             const response = await axios.post(
-                'https://e245-42-116-78-238.ngrok-free.app/index.py',
-                // img
-                { image: base64Image }
-                // {
-                //     // headers: {
-                //     //     'Content-Type': 'multipart/img',
-                //     //     // Các header khác nếu cần
-                //     // },
-                // }
+                'https://968f-42-116-78-238.ngrok-free.app/index1',
+                img,
+                // { image: base64Image }
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Các header khác nếu cần
+                    },
+                }
             );
 
             // Kiểm tra và xử lý response từ server

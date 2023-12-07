@@ -4,8 +4,9 @@ import Icon from 'react-native-vector-icons/Fontisto';
 import { launchCameraAsync, launchImageLibraryAsync } from 'expo-image-picker';
 import { Camera } from 'expo-camera';
 import axios from 'axios';
+import RNFetchBlob from 'react-native-fetch-blob';
 
-const ContentHomeCamera = () => {
+const ContentHomeCamera = ({ navigation }) => {
     const [img, setImg] = useState('');
     const requsetCameraPermission = async () => {
         try {
@@ -37,11 +38,18 @@ const ContentHomeCamera = () => {
             console.log(error);
         }
     };
+
+    const getImageBase64 = async (img) => {
+        const response = await RNFetchBlob.fetch('GET', img);
+        const base64Image = response.base64();
+        return base64Image;
+    };
     const uploadImage = async (img) => {
         try {
             // Tạo đối tượng FormData để chứa dữ liệu
             const formData = new FormData();
-
+            // Chuyển đổi đường link ảnh sang base64
+            const base64Image = await getImageBase64(img);
             // Thêm ảnh vào FormData
             formData.append('image', {
                 uri: img,
@@ -50,20 +58,32 @@ const ContentHomeCamera = () => {
             } as any); // Sử dụng 'as any' để bypass lỗi kiểu dữ liệu
 
             // Sử dụng Axios để thực hiện HTTP request
-            const response = await axios.post('YOUR_API_ENDPOINT', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    // Các header khác nếu cần
-                },
-            });
+            const response = await axios.post(
+                'https://e245-42-116-78-238.ngrok-free.app/index.py',
+                // img
+                { image: base64Image }
+                // {
+                //     // headers: {
+                //     //     'Content-Type': 'multipart/img',
+                //     //     // Các header khác nếu cần
+                //     // },
+                // }
+            );
 
             // Kiểm tra và xử lý response từ server
             if (response.status === 200) {
                 console.log('Upload success:', response.data);
+                // Hiển thị kết quả từ server hoặc chuyển đến trang khác tùy thuộc vào logic của bạn
+                // Ví dụ:
+                setImg(img); // Hiển thị ảnh đã chọn
+                alert('Kết quả từ server: ' + response.data);
+                navigation.navigate('HomeDetail', { img, result: response.data });
             } else {
                 console.error('Upload failed:', response.status, response.statusText);
             }
-        } catch (error) {}
+        } catch (error) {
+            console.error('Error during image upload:', error);
+        }
     };
     return (
         <View style={styles.body}>
@@ -73,7 +93,7 @@ const ContentHomeCamera = () => {
                 <Image style={styles.img} source={require('../../assets/IMG_PBL/benh_img.jpg')} />
             )}
 
-            <TouchableOpacity style={styles.content} onPress={() => alert('Chuyển sang trang homeItem')}>
+            <TouchableOpacity style={styles.content} onPress={() => uploadImage(img)}>
                 <Text style={styles.content_lb}>Tra cứu</Text>
             </TouchableOpacity>
             <View style={styles.btn}>

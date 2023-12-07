@@ -11,6 +11,7 @@ import DetailStack from '../stacks/SearchStack';
 import ProfileStack from '../stacks/ProfileStack';
 import SearchStack from '../stacks/SearchStack';
 import HistoryStack from '../stacks/HistoryStack';
+import CameraStack from '../stacks/CameraStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -76,10 +77,10 @@ const BottomTabs = () => {
             //     };
             // }}
         >
-            <Tab.Screen name="Home" component={HomeCamera} options={{ headerShown: false }} />
-            <Tab.Screen name="Search" component={SearchStack} options={{ headerShown: false }} />
+            <Tab.Screen name="Home" component={CameraStack} options={{ headerShown: false }} />
+            {/* <Tab.Screen name="Search" component={SearchStack} options={{ headerShown: false }} /> */}
             <Tab.Screen name="History" component={HistoryStack} options={{ headerShown: false }} />
-            <Tab.Screen name="Profile" component={ProfileStack} options={{ headerShown: false }} />
+            <Tab.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
         </Tab.Navigator>
     );
 };

@@ -1,13 +1,16 @@
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Button } from 'react-native';
 import React, { useState } from 'react';
-
-const ContentProfile = (navigation) => {
+const ContentProfile = ({ navigation }) => {
     const [isEditable, setIsEditable] = useState(false);
     const [text, setText] = useState('');
-
     const handleButtonClick = () => {
         // Đảo ngược trạng thái editable
         setIsEditable(!isEditable);
+    };
+    const handleLogout = () => {
+        console.log('User has clicked the logout button.');
+        // Delete token here
+        navigation.navigate('SignIn');
     };
 
     return (
@@ -65,7 +68,7 @@ const ContentProfile = (navigation) => {
                         </Text>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
+                <TouchableOpacity onPress={handleLogout}>
                     <View style={styles.btn_edit}>
                         <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#3073D2' }}>Đăng xuất</Text>
                     </View>

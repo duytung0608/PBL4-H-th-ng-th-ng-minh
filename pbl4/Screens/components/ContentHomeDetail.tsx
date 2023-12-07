@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ContentHomeItem = ({ navigation, route }: any) => {
+const ContentHomeDetail = ({ navigation, route }: any) => {
     const [data, setData] = useState({
         avatar: '',
         cause: '',
@@ -31,23 +31,24 @@ const ContentHomeItem = ({ navigation, route }: any) => {
         if (result) {
             setData(result);
             setImg(img);
+            console.log('có dữ liệu!!!');
         }
 
         // Log để kiểm tra xem dữ liệu đã được truyền đúng không
         console.log('Received data:', result);
     };
-    useEffect(() => {
-        getData();
-        console.log('oke lay duoc data');
-    }, []);
-    // useEffect(handleReceivedData, [route.params]);
+    // useEffect(() => {
+    //     getData();
+    //     console.log('oke lay duoc data');
+    // }, []);
+    useEffect(handleReceivedData, [route.params]);
     return (
         <View style={styles.container}>
             <View style={styles.header_lb}>
                 <Text style={styles.title}>{data.name}</Text>
             </View>
             <View>
-                <Image style={styles.content_img} source={{ uri: data.avatar }} />
+                <Image style={styles.content_img} source={{ uri: img }} />
             </View>
 
             <View style={styles.content}>
@@ -120,4 +121,4 @@ const styles = StyleSheet.create({
         marginLeft: 15,
     },
 });
-export default ContentHomeItem;
+export default ContentHomeDetail;

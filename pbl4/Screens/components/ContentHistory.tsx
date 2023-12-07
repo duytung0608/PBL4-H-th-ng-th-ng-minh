@@ -8,10 +8,12 @@ import {
     Image,
     TouchableOpacity,
     FlatList,
+    ActivityIndicator,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Icons from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ContentHistory = ({ navigation }) => {
     const handleIconPress = () => {
@@ -88,6 +90,44 @@ const ContentHistory = ({ navigation }) => {
             image: 'https://firebasestorage.googleapis.com/v0/b/baith-e7c12.appspot.com/o/img_benh-dao-on-tren-lua.png?alt=media&token=31c1f98b-1f02-49b6-8a54-c8618c1a2f57',
         },
     ];
+
+    // goi API
+    const [forecast, setForecast] = useState([]);
+    const [isLoading, setLoading] = useState(true);
+    const getAPI = async () => {
+        try {
+            const respone = await fetch('https://6570239c09586eff6640c60f.mockapi.io/forecast');
+            const data = await respone.json();
+            setForecast(data);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+    useEffect(() => {
+        getAPI();
+    }, []);
+    const showdetail = async (item) => {
+        try {
+            await AsyncStorage.setItem('dulieu', JSON.stringify(item));
+            navigation.navigate('HomeItem');
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    // Hàm search
+    const [searchText, setSearchText] = useState('');
+    const SearchForecast = forecast.filter((item) => {
+        // Kiểm tra nếu tên sự kiện hoặc thông tin khác chứa giá trị đang được nhập
+        return (
+            item.name.toLowerCase().includes(searchText.toLowerCase()) ||
+            item.disease.toLowerCase().includes(searchText.toLowerCase()) ||
+            item.cause.toLowerCase().includes(searchText.toLowerCase()) ||
+            item.solution.toLowerCase().includes(searchText.toLowerCase())
+        );
+    });
     return (
         <View style={styles.body}>
             <View style={styles.search_header}>
@@ -97,32 +137,40 @@ const ContentHistory = ({ navigation }) => {
                         placeholderTextColor="#ABABAB"
                         placeholder={isFocused ? '' : 'Nhập tên loại cây, loại bệnh ...'} // Hiển thị placeholder tùy thuộc vào trạng thái isFocused
                         // ... các thuộc tính khác
-                        onChangeText={(text) => setInputValue(text)}
+                        onChangeText={(text) => setSearchText(text)}
                         multiline={false} // Chỉ cho phép nhập trên 1 dòng
                         numberOfLines={1} // Số dòng tối đa là 1
-                        value={inputValue}
-                        onFocus={handleFocus}
-                        onBlur={handleBlur}
+                        // value={inputValue}
+                        // onFocus={handleFocus}
+                        // onBlur={handleBlur}
                     />
                 </TouchableWithoutFeedback>
                 <Icon name="search1" size={30} onPress={handleIconPress} />
             </View>
 
             <View style={styles.search_list}>
-                <FlatList
-                    data={dataFake}
-                    renderItem={({ item }) => (
-                        <View style={styles.search_item}>
-                            <Image style={styles.item_img} source={{ uri: item.image }} />
-                            <View style={styles.item_content}>
-                                <Text style={styles.content_header}>{item.name}</Text>
-                                <Text style={styles.content_header}>{item.benh}</Text>
-                            </View>
-                        </View>
-                    )}
-                />
-            </View>
+                {isLoading ? (
+                    <ActivityIndicator />
+                ) : (
+                    <FlatList
+                        data={SearchForecast}
+                        renderItem={({ item }) => (
+                            <View style={styles.search_item}>
+                                <TouchableOpacity onPress={() => showdetail(item)}>
+                                    <Image style={styles.item_img} source={{ uri: item.avatar }} />
+                                </TouchableOpacity>
 
+                                <View style={styles.item_content}>
+                                    <TouchableOpacity onPress={() => showdetail(item)}>
+                                        <Text style={styles.content_header}>{item.name}</Text>
+                                    </TouchableOpacity>
+                                    <Text style={styles.content_header}>{item.disease}</Text>
+                                </View>
+                            </View>
+                        )}
+                    />
+                )}
+            </View>
             <Icons style={styles.btn_search} name="add-circle" size={80} onPress={goCamera} />
         </View>
     );
@@ -136,6 +184,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         alignItems: 'center',
         paddingTop: 10,
+        marginBottom: 100,
     },
     search_header: {
         flexDirection: 'row',
@@ -156,7 +205,7 @@ const styles = StyleSheet.create({
     search_list: {
         marginVertical: 10,
         width: '90%',
-        height: 500,
+        height: 530,
     },
     search_item: {
         backgroundColor: '#F6F0E2',
@@ -202,5 +251,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: '10%',
         top: '100%',
+        marginTop: 20,
     },
 });

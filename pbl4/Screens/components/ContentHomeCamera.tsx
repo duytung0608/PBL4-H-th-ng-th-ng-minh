@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Icon from 'react-native-vector-icons/Fontisto';
 import { launchCameraAsync, launchImageLibraryAsync } from 'expo-image-picker';
 import { Camera } from 'expo-camera';
+import axios from 'axios';
 
 const ContentHomeCamera = () => {
     const [img, setImg] = useState('');
@@ -36,6 +37,34 @@ const ContentHomeCamera = () => {
             console.log(error);
         }
     };
+    const uploadImage = async (img) => {
+        try {
+            // Tạo đối tượng FormData để chứa dữ liệu
+            const formData = new FormData();
+
+            // Thêm ảnh vào FormData
+            formData.append('image', {
+                uri: img,
+                type: 'image/jpeg', // hoặc 'image/png' tùy vào định dạng của ảnh
+                name: 'photo.jpg',
+            } as any); // Sử dụng 'as any' để bypass lỗi kiểu dữ liệu
+
+            // Sử dụng Axios để thực hiện HTTP request
+            const response = await axios.post('YOUR_API_ENDPOINT', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    // Các header khác nếu cần
+                },
+            });
+
+            // Kiểm tra và xử lý response từ server
+            if (response.status === 200) {
+                console.log('Upload success:', response.data);
+            } else {
+                console.error('Upload failed:', response.status, response.statusText);
+            }
+        } catch (error) {}
+    };
     return (
         <View style={styles.body}>
             {img != '' ? (
@@ -68,6 +97,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#FFFF',
+        marginBottom: 300,
     },
     img: {
         width: 300,

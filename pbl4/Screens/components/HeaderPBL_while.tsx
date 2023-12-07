@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image } from 'react-native';
+import { View, Text, Image, ScrollView, StyleSheet } from 'react-native';
 
 const HeaderPBL_white = () => {
     return (

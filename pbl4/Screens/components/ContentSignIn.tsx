@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, SafeAreaView, TouchableOpacity, TextInput, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
+import axios from 'axios';
 // import { FIREBASE_AUTH } from "../../firebase";
 // import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
@@ -34,19 +35,20 @@ const ContentSignIn = ({ title, navigation }: ContentSingInProps) => {
 
     const onSubmit = () => {
         let formData = {
-            _email: email,
-            _pass: password,
+            email: email,
+            password: password,
         };
+
         let regexEmail = new RegExp(
             '(?:[a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*|"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])'
         );
-        if (!regexEmail.test(formData._email)) {
+        if (!regexEmail.test(formData.email)) {
             setCheckEmail(false);
         } else {
             setCheckEmail(true);
         }
-        formData._pass === '' ? setErrorPass('Pass không để rỗng') : setErrorPass('');
-        if (checkEmail === true || formData._pass !== '') {
+        formData.password === '' ? setErrorPass('Pass không để rỗng') : setErrorPass('');
+        if (checkEmail === true || formData.password !== '') {
             navigation.navigate('BottomTabs');
         } else {
             Alert.alert('Nhap lai!!!');
@@ -70,7 +72,7 @@ const ContentSignIn = ({ title, navigation }: ContentSingInProps) => {
                         <Text style={styles.txt}>Email</Text>
                         <View style={styles.Input}>
                             <TextInput
-                                placeholder="quyen@gmail.com"
+                                placeholder="Nhap Email"
                                 style={styles.InputTxt}
                                 onChangeText={(value) => setEmail(value)}
                             ></TextInput>

@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import { StyleSheet, View, Text, Image, TouchableOpacity, TextInput, Alert } from "react-native";
-import Icon from "react-native-vector-icons/AntDesign";
-import Checkbox from "expo-checkbox";
+import React, { useState } from 'react';
+import { StyleSheet, View, Text, Image, TouchableOpacity, TextInput, Alert } from 'react-native';
+import Icon from 'react-native-vector-icons/AntDesign';
+import Checkbox from 'expo-checkbox';
+import axios from 'axios';
 // import { FIREBASE_AUTH } from "../../firebase";
 // import { createUserWithEmailAndPassword } from "firebase/auth";
 // import { NavigationProp } from "@react-navigation/native";
 
-
 type ContentCreateAccountProps = {
     title: string;
     navigation: any;
-}
+};
 const ContentCreateAccount = ({ title, navigation }: ContentCreateAccountProps) => {
     const [isCheck, setIsCheck] = useState(false);
     const [email, setEmail] = useState('');
@@ -36,9 +36,21 @@ const ContentCreateAccount = ({ title, navigation }: ContentCreateAccountProps) 
         //     setLoading(false);
 
         // }
-    }
-
-
+        let formData = {
+            email: email,
+            password: password,
+        };
+        axios
+            .post('https://6570239c09586eff6640c60f.mockapi.io/account', formData)
+            .then((response) => {
+                if (response.data) {
+                    navigation.navigate('SignIn');
+                } else {
+                    alert('Dang ki chua thanh cong');
+                }
+            })
+            .catch((error) => console.error(error));
+    };
 
     function onSubmit(): void {
         let formData = {
@@ -48,12 +60,13 @@ const ContentCreateAccount = ({ title, navigation }: ContentCreateAccountProps) 
             _xnpass: xnpass,
         };
 
-        let regexEmail = new RegExp("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])");
+        let regexEmail = new RegExp(
+            '(?:[a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*|"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])'
+        );
 
         if (!regexEmail.test(formData._email)) {
             setCheckEmail(false);
-        }
-        else {
+        } else {
             setCheckEmail(true);
         }
 
@@ -61,15 +74,12 @@ const ContentCreateAccount = ({ title, navigation }: ContentCreateAccountProps) 
 
         if (formData._pass !== formData._xnpass) {
             setCheckXN(false);
-        }
-        else {
+        } else {
             setCheckXN(true);
         }
         if (checkEmail === false || checkXN === false || formData._pass !== '') {
             navigation.navigate('Home');
-
-        }
-        else {
+        } else {
             Alert.alert('Nhap lai!!!');
         }
     }
@@ -89,16 +99,29 @@ const ContentCreateAccount = ({ title, navigation }: ContentCreateAccountProps) 
                     <View style={styles.group}>
                         <Text style={styles.txt}>Email</Text>
                         <View style={styles.Input}>
-                            <TextInput placeholder="Nhập email" style={styles.InputTxt} onChangeText={(value) => setEmail(value)}></TextInput>
+                            <TextInput
+                                placeholder="Nhập email"
+                                style={styles.InputTxt}
+                                onChangeText={(value) => setEmail(value)}
+                            ></TextInput>
                         </View>
-                        <Text style={{ color: 'red', fontSize: 18, marginTop: 5 }}>{!checkEmail ? 'Sai định dạng email' : ''}</Text>
+                        <Text style={{ color: 'red', fontSize: 18, marginTop: 5 }}>
+                            {!checkEmail ? 'Sai định dạng email' : ''}
+                        </Text>
                     </View>
                     <View style={styles.group}>
                         <Text style={styles.txt}>Password</Text>
                         <View style={styles.Input}>
-                            <TextInput placeholder="Nhập mật khẩu" style={styles.InputTxt} secureTextEntry={true} onChangeText={(value) => setPassword(value)}></TextInput>
+                            <TextInput
+                                placeholder="Nhập mật khẩu"
+                                style={styles.InputTxt}
+                                secureTextEntry={true}
+                                onChangeText={(value) => setPassword(value)}
+                            ></TextInput>
                             <TouchableOpacity style={styles.InputIcon} onPress={() => alert('Hien mat khau')}>
-                                <Text ><Icon name="eye" size={30} /></Text>
+                                <Text>
+                                    <Icon name="eye" size={30} />
+                                </Text>
                             </TouchableOpacity>
                         </View>
                         <Text style={{ color: 'red', fontSize: 18, marginTop: 5 }}>{errorPass}</Text>
@@ -106,16 +129,26 @@ const ContentCreateAccount = ({ title, navigation }: ContentCreateAccountProps) 
                     <View style={styles.group}>
                         <Text style={styles.txt}>Xác nhận mật khẩu</Text>
                         <View style={styles.Input}>
-                            <TextInput placeholder="Xác nhận mật khẩu" style={styles.InputTxt} secureTextEntry={true} onChangeText={(value) => setXNPass(value)}></TextInput>
+                            <TextInput
+                                placeholder="Xác nhận mật khẩu"
+                                style={styles.InputTxt}
+                                secureTextEntry={true}
+                                onChangeText={(value) => setXNPass(value)}
+                            ></TextInput>
                             <TouchableOpacity style={styles.InputIcon} onPress={() => alert('Hien mat khau')}>
-                                <Text ><Icon name="eye" size={30} /></Text>
+                                <Text>
+                                    <Icon name="eye" size={30} />
+                                </Text>
                             </TouchableOpacity>
                         </View>
-                        <Text style={{ color: 'red', fontSize: 18, marginTop: 5 }}>{!checkXN ? 'Mật khẩu không đúng' : ''}</Text>
+                        <Text style={{ color: 'red', fontSize: 18, marginTop: 5 }}>
+                            {!checkXN ? 'Mật khẩu không đúng' : ''}
+                        </Text>
                     </View>
 
                     <View style={styles.xacnhan}>
-                        <Checkbox style={styles.xacnhanCheckBox}
+                        <Checkbox
+                            style={styles.xacnhanCheckBox}
                             disabled={false}
                             value={isCheck}
                             onValueChange={() => {
@@ -123,20 +156,18 @@ const ContentCreateAccount = ({ title, navigation }: ContentCreateAccountProps) 
                             }}
                         />
                         <View style={styles.xacnhanTitle}>
-                            <Text style={{ fontSize: 20 }}>
-                                Tôi chấp nhận những
-                            </Text>
+                            <Text style={{ fontSize: 20 }}>Tôi chấp nhận những</Text>
                             <TouchableOpacity>
                                 <Text style={{ fontSize: 20, fontWeight: '600' }}>Điều khoản sử dụng </Text>
                             </TouchableOpacity>
                             <Text style={{ fontSize: 20 }}>và</Text>
-                            <TouchableOpacity >
+                            <TouchableOpacity>
                                 <Text style={{ fontSize: 20, fontWeight: '600' }}> Chính sách bảo mật</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
 
-                    <View >
+                    <View>
                         <TouchableOpacity style={styles.button} onPress={signUp}>
                             <Text style={styles.btnText}>{title}</Text>
                         </TouchableOpacity>
@@ -145,11 +176,11 @@ const ContentCreateAccount = ({ title, navigation }: ContentCreateAccountProps) 
                     <View style={styles.titleLast}>
                         <Text style={{ fontSize: 20 }}> Đã có tài khoản?</Text>
                         <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
-                            <Text style={{ fontSize: 20, fontWeight: 'bold', }} > Đăng nhập</Text>
+                            <Text style={{ fontSize: 20, fontWeight: 'bold' }}> Đăng nhập</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
-            </View >
+            </View>
         </>
     );
 };
@@ -163,20 +194,16 @@ const styles = StyleSheet.create({
     },
     content_title: {
         flexDirection: 'row',
-
     },
     headerTitle: {
         fontSize: 30,
         fontWeight: '600',
         marginLeft: '20%',
     },
-    form: {
-
-    },
+    form: {},
     group: {
         paddingLeft: 20,
         paddingVertical: 15,
-
     },
     txt: {
         fontSize: 20,
@@ -190,12 +217,11 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         flexDirection: 'row',
         alignContent: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
     },
     InputTxt: {
         fontSize: 20,
         width: '90%',
-
     },
     InputIcon: {
         marginTop: 10,
@@ -205,16 +231,14 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         marginLeft: 30,
         marginTop: 10,
-
     },
     xacnhanCheckBox: {
         marginTop: 2,
-
     },
     xacnhanTitle: {
         marginLeft: 10,
         flexDirection: 'row',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
     },
     button: {
         width: 320,
@@ -224,7 +248,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: 30,
-        marginLeft: '10%'
+        marginLeft: '10%',
     },
     btnText: {
         fontSize: 25,
@@ -234,7 +258,7 @@ const styles = StyleSheet.create({
     titleLast: {
         marginVertical: 20,
         flexDirection: 'row',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
 });
 export default ContentCreateAccount;

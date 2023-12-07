@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ContentHomeItem = ({ navigation, route }: any) => {
+const ContentHomeItem = ({ navigation }: any) => {
     const [data, setData] = useState({
         avatar: '',
         cause: '',
@@ -23,18 +23,6 @@ const ContentHomeItem = ({ navigation, route }: any) => {
         } catch (error) {
             console.log(error);
         }
-    };
-    const handleReceivedData = () => {
-        const { img, result } = route.params;
-
-        // Kiểm tra xem result có dữ liệu không
-        if (result) {
-            setData(result);
-            setImg(img);
-        }
-
-        // Log để kiểm tra xem dữ liệu đã được truyền đúng không
-        console.log('Received data:', result);
     };
     useEffect(() => {
         getData();

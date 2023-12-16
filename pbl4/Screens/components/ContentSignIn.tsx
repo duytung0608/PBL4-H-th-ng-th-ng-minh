@@ -19,20 +19,6 @@ const ContentSignIn = ({ title, navigation }: ContentSingInProps) => {
 
     // const auth = FIREBASE_AUTH;
 
-    const signIn = async () => {
-        setLoading(true);
-        // try {
-        //     const reponse = await signInWithEmailAndPassword(auth, email, password);
-        //     console.log(reponse);
-        // } catch (error:any) {
-        //     console.log(error);
-        //     alert('Sign in failed: ' + error.message);
-        // } finally {
-        //     setLoading(false);
-        // }
-        alert('dang nhap thanh cong => chuyen sang trang home camera');
-    };
-
     // const onSubmit = async () => {
     //     try {
     //         let formData = {
@@ -70,6 +56,35 @@ const ContentSignIn = ({ title, navigation }: ContentSingInProps) => {
     //     }
     // };
 
+    const checkLogin = async (email, password, setCheckEmail, setErrorPass, navigation) => {
+        let formData = {
+            email: email,
+            password: password,
+        };
+
+        try {
+            // Gửi yêu cầu để kiểm tra đăng nhập từ API
+            const response = await axios.get('https://6570239c09586eff6640c60f.mockapi.io/account', {
+                params: {
+                    email: formData.email,
+                    password: formData.password,
+                },
+            });
+
+            // Kiểm tra xem có thông tin tài khoản trùng khớp hay không
+            if (response.data.length > 0) {
+                // Đăng nhập thành công, chuyển đến trang BottomTabs
+                navigation.navigate('BottomTabs');
+            } else {
+                // Tài khoản không hợp lệ
+                Alert.alert('Tài khoản hoặc mật khẩu không đúng. Vui lòng kiểm tra lại!');
+            }
+        } catch (error) {
+            console.error(error);
+            // Xử lý lỗi khi gọi API
+            Alert.alert('Đã xảy ra lỗi khi kiểm tra đăng nhập. Vui lòng thử lại sau!');
+        }
+    };
     const onSubmit = () => {
         let formData = {
             email: email,
@@ -85,8 +100,8 @@ const ContentSignIn = ({ title, navigation }: ContentSingInProps) => {
             setCheckEmail(true);
         }
         formData.password === '' ? setErrorPass('Pass không để rỗng') : setErrorPass('');
-        if (checkEmail === true || formData.password !== '') {
-            navigation.navigate('BottomTabs');
+        if (checkEmail === true && formData.password !== '') {
+            checkLogin(email, password, setCheckEmail, setErrorPass, navigation);
         } else {
             Alert.alert('Nhap lai!!!');
         }

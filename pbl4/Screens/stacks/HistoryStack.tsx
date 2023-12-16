@@ -12,6 +12,8 @@ const HistoryStack = () => {
         <Stack.Navigator>
             <Stack.Screen name="History" component={History} options={{ headerShown: false }}></Stack.Screen>
             <Stack.Screen name="HomeItem" component={HomeItem} options={{ headerShown: false }}></Stack.Screen>
+            <Stack.Screen name="HistoryStack" component={HistoryStack} options={{ headerShown: false }}></Stack.Screen>
+            <Stack.Screen name="HomeCamera" component={HomeCamera} options={{ headerShown: false }}></Stack.Screen>
         </Stack.Navigator>
     );
 };

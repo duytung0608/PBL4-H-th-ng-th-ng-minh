@@ -1,6 +1,7 @@
-import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const ContentHomeItem = ({ navigation }: any) => {
     const [data, setData] = useState({
@@ -18,6 +19,7 @@ const ContentHomeItem = ({ navigation }: any) => {
 
             if (value !== null) {
                 const parsedData = JSON.parse(value);
+                console.log(parsedData);
                 setData(parsedData);
             }
         } catch (error) {
@@ -28,7 +30,23 @@ const ContentHomeItem = ({ navigation }: any) => {
         getData();
         console.log('oke lay duoc data');
     }, []);
-    // useEffect(handleReceivedData, [route.params]);
+
+    // Hàm xóa item
+    const deleteItem = (id) => {
+        axios
+            .delete(`https://6570239c09586eff6640c60f.mockapi.io/forecast/${id}`)
+            .then((response) => {
+                if (response.status === 200) {
+                    // Item deleted successfully
+                    console.log('Item deleted:', id);
+                    navigation.navigate('HistoryStack');
+                    // Add any additional logic you need after a successful deletion
+                } else {
+                    alert('Xóa mục không thành công');
+                }
+            })
+            .catch((error) => console.error('Error deleting item:', error));
+    };
     return (
         <View style={styles.container}>
             <View style={styles.header_lb}>
@@ -53,6 +71,11 @@ const ContentHomeItem = ({ navigation }: any) => {
                         <Text style={styles.content_item_title}>{data.solution}</Text>
                     </View>
                 </ScrollView>
+            </View>
+            <View>
+                <TouchableOpacity style={styles.button} onPress={() => deleteItem(data.id)}>
+                    <Text style={styles.btnText}>Xóa</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -87,11 +110,11 @@ const styles = StyleSheet.create({
     },
 
     content: {
-        width: '65%',
-        height: '50%',
+        width: '75%',
+        height: 370,
         backgroundColor: '#E2EDF6',
         borderRadius: 10,
-        marginBottom: 30,
+        marginBottom: 20,
     },
 
     content_item: {
@@ -106,6 +129,21 @@ const styles = StyleSheet.create({
         fontSize: 22,
         fontWeight: '500',
         marginLeft: 15,
+    },
+    button: {
+        width: 100,
+        height: 56,
+        borderRadius: 50,
+        backgroundColor: 'tomato',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginLeft: '10%',
+        marginBottom: 20,
+    },
+    btnText: {
+        fontSize: 25,
+        fontWeight: '500',
+        color: '#F6E2E2',
     },
 });
 export default ContentHomeItem;

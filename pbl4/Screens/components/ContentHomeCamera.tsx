@@ -132,7 +132,7 @@ const ContentHomeCamera = ({ navigation }) => {
     const sendImageLinkToServer = async (img) => {
         try {
             // Gửi đường dẫn ảnh đến server
-            const serverEndpoint = 'https://4c22-42-116-78-238.ngrok-free.app/index1'; // Thay thế bằng địa chỉ endpoint của server
+            const serverEndpoint = 'https://3c9b-2001-ee0-292-69a2-70b9-1d32-4dc7-2ff5.ngrok-free.app/index1'; // Thay thế bằng địa chỉ endpoint của server
             const response = await axios.post(
                 serverEndpoint,
                 { image: img },
@@ -149,16 +149,32 @@ const ContentHomeCamera = ({ navigation }) => {
                     setImg(img); // Hiển thị ảnh đã chọn
                     const dulieu = response.data.result;
                     console.log('Upload success:', dulieu);
-                    const cause = dulieu.cause;
-                    const disease = dulieu.disease;
-                    const id = dulieu.id;
-                    const solution = dulieu.solution;
-                    console.log('cause =', cause);
-                    // const name = dulieu.name;
-                    // Lưu item và img vào AsyncStorage
-                    await AsyncStorage.setItem('dulieu', JSON.stringify({ img, cause, disease, id, solution }));
-                    // Chuyển đến màn hình HomeItem
-                    navigation.navigate('HomeDetail');
+
+                    // Your existing code here
+                    if (dulieu !== null) {
+                        const cause = dulieu.cause;
+                        const disease = dulieu.disease;
+                        const id = dulieu.id;
+                        const solution = dulieu.solution;
+                        const match = disease.match(/^([^\s_]+)/);
+
+                        let name;
+                        if (match && match[1]) {
+                            name = match[1].trim();
+                        } else {
+                            // Handle the case when there is no match
+                            name = 'Unknown';
+                        }
+                        // Lưu item và img vào AsyncStorage
+                        await AsyncStorage.setItem(
+                            'dulieu',
+                            JSON.stringify({ img, cause, disease, id, solution, name })
+                        );
+                        // Chuyển đến màn hình HomeItem
+                        navigation.navigate('HomeDetail');
+                    } else {
+                        alert('Không tìm thấy cây có bệnh hoặc cây không bệnh');
+                    }
                 } else {
                     // Dữ liệu không tồn tại
                     console.error('Response data is undefined or null.');

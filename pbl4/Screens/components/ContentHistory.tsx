@@ -37,59 +37,8 @@ const ContentHistory = ({ navigation }) => {
     };
 
     const goCamera = () => {
-        navigation.navigate('Home');
+        navigation.navigate('HomeCamera');
     };
-
-    const dataFake = [
-        {
-            id: 1,
-            name: 'Cay Lua',
-            benh: 'Loai benh',
-            image: 'https://firebasestorage.googleapis.com/v0/b/baith-e7c12.appspot.com/o/img_benh-dao-on-tren-lua.png?alt=media&token=31c1f98b-1f02-49b6-8a54-c8618c1a2f57',
-        },
-        {
-            id: 2,
-            name: 'Cay Lua',
-            benh: 'Loai benh',
-            image: 'https://firebasestorage.googleapis.com/v0/b/baith-e7c12.appspot.com/o/img_benh-dao-on-tren-lua.png?alt=media&token=31c1f98b-1f02-49b6-8a54-c8618c1a2f57',
-        },
-        {
-            id: 3,
-            name: 'Cay Lua',
-            benh: 'Loai benh',
-            image: 'https://firebasestorage.googleapis.com/v0/b/baith-e7c12.appspot.com/o/img_benh-dao-on-tren-lua.png?alt=media&token=31c1f98b-1f02-49b6-8a54-c8618c1a2f57',
-        },
-        {
-            id: 4,
-            name: 'Cay Lua',
-            benh: 'Loai benh',
-            image: 'https://firebasestorage.googleapis.com/v0/b/baith-e7c12.appspot.com/o/img_benh-dao-on-tren-lua.png?alt=media&token=31c1f98b-1f02-49b6-8a54-c8618c1a2f57',
-        },
-        {
-            id: 5,
-            name: 'Cay Lua',
-            benh: 'Loai benh',
-            image: 'https://firebasestorage.googleapis.com/v0/b/baith-e7c12.appspot.com/o/img_benh-dao-on-tren-lua.png?alt=media&token=31c1f98b-1f02-49b6-8a54-c8618c1a2f57',
-        },
-        {
-            id: 6,
-            name: 'Cay Lua',
-            benh: 'Loai benh',
-            image: 'https://firebasestorage.googleapis.com/v0/b/baith-e7c12.appspot.com/o/img_benh-dao-on-tren-lua.png?alt=media&token=31c1f98b-1f02-49b6-8a54-c8618c1a2f57',
-        },
-        {
-            id: 7,
-            name: 'Cay Lua',
-            benh: 'Loai benh',
-            image: 'https://firebasestorage.googleapis.com/v0/b/baith-e7c12.appspot.com/o/img_benh-dao-on-tren-lua.png?alt=media&token=31c1f98b-1f02-49b6-8a54-c8618c1a2f57',
-        },
-        {
-            id: 8,
-            name: 'Cay Lua',
-            benh: 'Loai benh',
-            image: 'https://firebasestorage.googleapis.com/v0/b/baith-e7c12.appspot.com/o/img_benh-dao-on-tren-lua.png?alt=media&token=31c1f98b-1f02-49b6-8a54-c8618c1a2f57',
-        },
-    ];
 
     // goi API
     const [forecast, setForecast] = useState([]);
@@ -164,7 +113,13 @@ const ContentHistory = ({ navigation }) => {
                                     <TouchableOpacity onPress={() => showdetail(item)}>
                                         <Text style={styles.content_header}>{item.name}</Text>
                                     </TouchableOpacity>
-                                    <Text style={styles.content_header}>{item.disease}</Text>
+                                    <Text
+                                        style={styles.content_header}
+                                        numberOfLines={1} // Set the number of lines to 1
+                                        ellipsizeMode="tail" // Truncate text with an ellipsis at the end
+                                    >
+                                        {item.disease}
+                                    </Text>
                                 </View>
                             </View>
                         )}
@@ -232,6 +187,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: '600',
         color: '#15504A',
+        width: 250,
     },
     content_body: {
         flexDirection: 'row',

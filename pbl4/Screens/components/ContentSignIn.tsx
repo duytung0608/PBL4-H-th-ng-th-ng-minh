@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, SafeAreaView, TouchableOpacity, TextInput, Alert } from 'react-native';
-import Icon from 'react-native-vector-icons/AntDesign';
+import Icon from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
+import { user } from '../../repositories';
 // import { FIREBASE_AUTH } from "../../firebase";
 // import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
@@ -16,45 +17,6 @@ const ContentSignIn = ({ title, navigation }: ContentSingInProps) => {
     const [errorPass, setErrorPass] = useState('');
 
     const [loading, setLoading] = useState(false);
-
-    // const auth = FIREBASE_AUTH;
-
-    // const onSubmit = async () => {
-    //     try {
-    //         let formData = {
-    //             email: email,
-    //             password: password,
-    //         };
-
-    //         let regexEmail = new RegExp(
-    //             '(?:[a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*|"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])'
-    //         );
-    //         if (!regexEmail.test(formData.email)) {
-    //             setCheckEmail(false);
-    //             return;
-    //         } else {
-    //             setCheckEmail(true);
-    //         }
-    //         formData.password === '' ? setErrorPass('Pass không để rỗng') : setErrorPass('');
-    //         if (checkEmail === true || formData.password !== '') {
-    //             // Gửi yêu cầu đăng nhập tới API
-    //             // const response = await axios.post('https://6570239c09586eff6640c60f.mockapi.io/account', formData);
-    //             navigation.navigate('BottomTabs');
-    //             // if (response.status === 200) {
-    //             //     // Đăng nhập thành công
-
-    //             // } else {
-    //             //     // Đăng nhập thất bại
-    //             //     Alert.alert('Thông tin đăng nhập không đúng. Vui lòng kiểm tra lại.');
-    //             // }
-    //         } else {
-    //             Alert.alert('Nhap lai!!!');
-    //         }
-    //     } catch (error) {
-    //         console.error('Error during login:', error);
-    //         Alert.alert('Đã xảy ra lỗi trong quá trình đăng nhập.');
-    //     }
-    // };
 
     const checkLogin = async (email, password, setCheckEmail, setErrorPass, navigation) => {
         let formData = {
@@ -85,6 +47,31 @@ const ContentSignIn = ({ title, navigation }: ContentSingInProps) => {
             Alert.alert('Đã xảy ra lỗi khi kiểm tra đăng nhập. Vui lòng thử lại sau!');
         }
     };
+    const handelLogin = async () => {
+        try {
+            const response = await user.login({ username: email, password });
+            console.log('username = ', email);
+            console.log('password = ', password);
+
+            navigation.navigate('BottomTabs', { user: response.user });
+        } catch (error) {
+            if (error.response && error.response.status) {
+                // Kiểm tra có phản hồi từ server hay không
+                if (error.response.status === 404) {
+                    alert('Account not found');
+                } else if (error.response.status === 401) {
+                    alert('Incorrect password');
+                } else {
+                    console.error('Server error:', error.response.status, error.response.data);
+                    alert('Server error');
+                }
+            } else {
+                // Không có phản hồi từ server, xử lý lỗi khác
+                console.error('Error:', error.message);
+                alert('An unexpected error occurred');
+            }
+        }
+    };
     const onSubmit = () => {
         let formData = {
             email: email,
@@ -101,10 +88,15 @@ const ContentSignIn = ({ title, navigation }: ContentSingInProps) => {
         }
         formData.password === '' ? setErrorPass('Pass không để rỗng') : setErrorPass('');
         if (checkEmail === true && formData.password !== '') {
-            checkLogin(email, password, setCheckEmail, setErrorPass, navigation);
+            checkLogin(email, password, setEmail, setPassword, navigation);
         } else {
             Alert.alert('Nhap lai!!!');
         }
+    };
+
+    const [showPassword, setShowPassword] = useState(false);
+    const toggleShowPassword = () => {
+        setShowPassword(!showPassword);
     };
 
     return (
@@ -113,7 +105,7 @@ const ContentSignIn = ({ title, navigation }: ContentSingInProps) => {
                 <View style={styles.content_title}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
                         <Text>
-                            <Icon name="arrowleft" size={40} />
+                            <Icon name="chevron-back" size={40} />
                         </Text>
                     </TouchableOpacity>
                     <Text style={styles.headerTitle}>{title}</Text>
@@ -136,12 +128,12 @@ const ContentSignIn = ({ title, navigation }: ContentSingInProps) => {
                             <TextInput
                                 placeholder="Nhập mật khẩu"
                                 style={styles.InputTxt}
-                                secureTextEntry={true}
+                                secureTextEntry={!showPassword}
                                 onChangeText={(value) => setPassword(value)}
                             ></TextInput>
-                            <TouchableOpacity style={styles.InputIcon} onPress={() => alert('Hien mat khau')}>
+                            <TouchableOpacity style={styles.InputIcon} onPress={toggleShowPassword}>
                                 <Text>
-                                    <Icon name="eye" size={30} />
+                                    {showPassword ? <Icon name="eye" size={30} /> : <Icon name="eye-off" size={30} />}
                                 </Text>
                             </TouchableOpacity>
                         </View>

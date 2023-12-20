@@ -14,6 +14,7 @@ import React, { useState, useEffect } from 'react';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Icons from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const ContentHistory = ({ navigation }) => {
     const handleIconPress = () => {
@@ -43,17 +44,32 @@ const ContentHistory = ({ navigation }) => {
     // goi API
     const [forecast, setForecast] = useState([]);
     const [isLoading, setLoading] = useState(true);
+    // const getAPI = async () => {
+    //     try {
+    //         const respone = await fetch('http://localhost:3000/api/pbl4/accounts');
+    //         const data = await respone.json();
+    //         console.log(data);
+    //         setForecast(data);
+    //     } catch (error) {
+    //         console.log(error);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
     const getAPI = async () => {
         try {
-            const respone = await fetch('https://6570239c09586eff6640c60f.mockapi.io/forecast');
-            const data = await respone.json();
+            const response = await axios.get('http://localhost:3000/api/pbl4/accounts');
+            const data = response.data;
+            console.log(data);
             setForecast(data);
         } catch (error) {
-            console.log(error);
+            console.error(error);
         } finally {
             setLoading(false);
         }
     };
+
     useEffect(() => {
         getAPI();
     }, []);

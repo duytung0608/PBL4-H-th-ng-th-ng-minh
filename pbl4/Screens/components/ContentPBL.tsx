@@ -1,8 +1,29 @@
 import { NavigationProp } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, View, Text, Image, Button, TouchableOpacity } from 'react-native';
+import axios from 'axios';
 
 const ContentPBL = ({ navigation }) => {
+    const handleTest = async () => {
+        const url = 'http://localhost:8088/api/user';
+        try {
+            console.log(url);
+            const response = await axios.get(url);
+            console.log('2');
+        } catch (error) {
+            console.error('[ERR]: ', error.message);
+        }
+    };
+    // const handleTest = async () => {
+    //     try {
+    //         console.log('O DAY');
+    //         const response = await fetch('http://localhost:8088/api/user');
+    //         const json = await response.json();
+    //         console.log(json);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // };
     return (
         <>
             <View style={styles.body}>
@@ -26,6 +47,9 @@ const ContentPBL = ({ navigation }) => {
                         <Text style={{ fontSize: 20, fontWeight: 'bold' }}> Login</Text>
                     </TouchableOpacity>
                 </View>
+                <TouchableOpacity onPress={handleTest}>
+                    <Text>Test BTN</Text>
+                </TouchableOpacity>
             </View>
         </>
     );

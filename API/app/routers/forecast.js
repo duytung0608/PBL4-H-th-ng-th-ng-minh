@@ -1,12 +1,12 @@
 var express = require('express');
 var router = express.Router();
 
-const controllerName = 'accounts';
+const controllerName = 'forecast';
 const MainModel = require(__path_models + controllerName);
 
 router.get('/', async (req, res, next) => {
     try {
-        const data = await MainModel.listAccounts({}, { task: 'all' });
+        const data = await MainModel.listForecast({}, { task: 'all' });
         res.status(200).json({
             success: true,
             data: data,
@@ -16,9 +16,9 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-router.get('/:username', async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
     try {
-        const data = await MainModel.listAccounts({ username: req.params.username }, { task: 'one' });
+        const data = await MainModel.listForecast({ id: req.params.id }, { task: 'one' });
         res.status(200).json({
             success: true,
             data: data,
@@ -31,10 +31,12 @@ router.get('/:username', async (req, res, next) => {
 router.post('/add', async (req, res, next) => {
     try {
         let params = [];
-        params.username = req.body.username;
-        params.password = req.body.password;
         params.name = req.body.name;
-        params.phone = req.body.phone;
+        params.avatar = req.body.avatar;
+        params.disease = req.body.disease;
+        params.cause = req.body.cause;
+        params.solution = req.body.solution;
+        params.id = req.body.id;
 
         const data = await MainModel.create(params);
 
@@ -47,10 +49,10 @@ router.post('/add', async (req, res, next) => {
     }
 });
 
-router.put('/edit/:username', async (req, res, next) => {
+router.put('/edit/:id', async (req, res, next) => {
     try {
         let body = req.body;
-        const data = await MainModel.editAccount({ username: req.params.username, body: body }, { task: 'edit' });
+        const data = await MainModel.editAccount({ id: req.params.id, body: body }, { task: 'edit' });
         res.status(200).json({
             success: true,
             data: data,
@@ -59,23 +61,15 @@ router.put('/edit/:username', async (req, res, next) => {
         res.status(400).json({ success: false });
     }
 });
-router.delete('/delete/:username', async (req, res, next) => {
+router.delete('/delete/:id', async (req, res, next) => {
     try {
-        const data = await MainModel.deleteAccount({ username: req.params.username }, { task: 'one' });
+        const data = await MainModel.deleteAccount({ id: req.params.id }, { task: 'one' });
         res.status(200).json({
             success: true,
             data: data,
         });
     } catch (error) {
         res.status(400).json({ success: false });
-    }
-});
-
-router.get('/get/hello', async (req, res, next) => {
-    try {
-        console.log('TEST');
-    } catch (error) {
-        throw error;
     }
 });
 

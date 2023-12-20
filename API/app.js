@@ -6,7 +6,13 @@ const mongoose = require('mongoose');
 
 var app = express();
 app.use(express.json());
-app.use(cors());
+
+const corsOptions = {
+    origin: 'http://localhost:8081',
+    optionsSuccessStatus: 200, // một số trình duyệt (đặc biệt là các trình duyệt cũ) có thể yêu cầu giá trị này để xử lý đúng cách.
+};
+
+app.use(cors(corsOptions));
 const pathConfig = require('./path');
 global.__base = __dirname + '/';
 global.__path_app = __base + pathConfig.folder_app + '/';

@@ -1,17 +1,17 @@
 const { param } = require('../routers');
 
-const MainModel = require(__path_schemas + 'forecast');
+const MainModel = require(__path_schemas + 'forecasts');
 
 module.exports = {
     create: (forecast) => {
         return new MainModel(forecast).save();
     },
-    listForecast: (params, option) => {
+    listForecasts: (params, option) => {
         if (option.task == 'all') {
-            return MainModel.find({}).select('name avatar disease cause solution id ');
+            return MainModel.find({}).select('id name avatar disease cause solution  ');
         }
         if (option.task == 'one') {
-            return MainModel.find({ id: params.id }).select('name avatar disease cause solution id ');
+            return MainModel.find({ id: params.id }).select('id name avatar disease cause solution ');
         }
     },
     deleteForecast: (params, option) => {

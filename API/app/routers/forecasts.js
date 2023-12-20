@@ -1,12 +1,12 @@
 var express = require('express');
 var router = express.Router();
 
-const controllerName = 'forecast';
+const controllerName = 'forecasts';
 const MainModel = require(__path_models + controllerName);
 
 router.get('/', async (req, res, next) => {
     try {
-        const data = await MainModel.listForecast({}, { task: 'all' });
+        const data = await MainModel.listForecasts({}, { task: 'all' });
         res.status(200).json({
             success: true,
             data: data,
@@ -18,7 +18,7 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:id', async (req, res, next) => {
     try {
-        const data = await MainModel.listForecast({ id: req.params.id }, { task: 'one' });
+        const data = await MainModel.listForecasts({ id: req.params.id }, { task: 'one' });
         res.status(200).json({
             success: true,
             data: data,
@@ -36,7 +36,7 @@ router.post('/add', async (req, res, next) => {
         params.disease = req.body.disease;
         params.cause = req.body.cause;
         params.solution = req.body.solution;
-        params.id = req.body.id;
+        params.id = makeId(8);
 
         const data = await MainModel.create(params);
 

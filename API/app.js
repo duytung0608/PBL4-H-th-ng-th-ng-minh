@@ -1,7 +1,7 @@
 var createError = require('http-errors');
 var express = require('express');
 var cors = require('cors');
-
+const methodOverride = require('method-override');
 const mongoose = require('mongoose');
 
 var app = express();
@@ -25,6 +25,8 @@ global.__path_configs = __path_app + pathConfig.folder_configs + '/';
 const systemConfig = require(__path_configs + 'system');
 const databaseConfig = require(__path_configs + 'database');
 
+// Sử dụng middleware method-override
+app.use(methodOverride('_method'));
 // Local variable
 app.locals.systemConfig = systemConfig;
 

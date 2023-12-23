@@ -52,7 +52,7 @@ router.post('/add', async (req, res, next) => {
 router.put('/edit/:id', async (req, res, next) => {
     try {
         let body = req.body;
-        const data = await MainModel.editAccount({ id: req.params.id, body: body }, { task: 'edit' });
+        const data = await MainModel.editForecast({ id: req.params.id, body: body }, { task: 'edit' });
         res.status(200).json({
             success: true,
             data: data,
@@ -63,7 +63,7 @@ router.put('/edit/:id', async (req, res, next) => {
 });
 router.delete('/delete/:id', async (req, res, next) => {
     try {
-        const data = await MainModel.deleteAccount({ id: req.params.id }, { task: 'one' });
+        const data = await MainModel.deleteForecast({ id: req.params.id }, { task: 'one' });
         res.status(200).json({
             success: true,
             data: data,

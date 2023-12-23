@@ -17,6 +17,7 @@ const ContentHomeDetail = ({ navigation, route }: any) => {
     const [name, setName] = useState('');
     const [id, setId] = useState('');
     const [solution, setSolution] = useState('');
+    const [_id, set_Id] = useState('');
 
     const [image, setImage] = useState('');
     const getData = async () => {
@@ -51,7 +52,7 @@ const ContentHomeDetail = ({ navigation, route }: any) => {
 
     const save = () => {
         axios
-            .post('https://6570239c09586eff6640c60f.mockapi.io/forecast', formData)
+            .post('https://pbl4-h-th-ng-th-ng-minh.onrender.com/api/pbl4/forecasts', formData)
             .then((response) => {
                 if (response.data) {
                     navigation.navigate('History');

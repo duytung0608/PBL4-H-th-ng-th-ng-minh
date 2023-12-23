@@ -12,7 +12,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import CreateAccount from './Screens/home/CreateAccount';
 import SignIn from './Screens/home/SignIn';
 import BottomTabs from './Screens/home/BottomTabs';
-
+import NavicationApp from './Screens/home/NavicationApp';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -33,15 +33,16 @@ export default function App() {
             {/* <HomeCamera /> */}
             {/* <HomeItem /> */}
             {/* <LoginScreen /> */}
+            {/* <View style={styles.app}>
+            <NavicationApp />
+        </View> */}
         </>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
+    app: {
         flex: 1,
         backgroundColor: '#FFFF',
-        alignItems: 'center',
-        justifyContent: 'center',
     },
 });

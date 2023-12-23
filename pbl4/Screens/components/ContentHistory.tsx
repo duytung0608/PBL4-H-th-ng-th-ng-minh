@@ -59,10 +59,11 @@ const ContentHistory = ({ navigation }) => {
 
     const getAPI = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/api/pbl4/accounts');
-            const data = response.data;
-            console.log(data);
-            setForecast(data);
+            const response = await axios.get('https://pbl4-h-th-ng-th-ng-minh.onrender.com/api/pbl4/forecasts');
+            const responseData = response.data.data;
+            console.log('data: ', responseData);
+            // setForecast(data);
+            setForecast(responseData);
         } catch (error) {
             console.error(error);
         } finally {
@@ -84,15 +85,23 @@ const ContentHistory = ({ navigation }) => {
 
     // Hàm search
     const [searchText, setSearchText] = useState('');
-    const SearchForecast = forecast.filter((item) => {
-        // Kiểm tra nếu tên sự kiện hoặc thông tin khác chứa giá trị đang được nhập
-        return (
-            item.name.toLowerCase().includes(searchText.toLowerCase()) ||
-            item.disease.toLowerCase().includes(searchText.toLowerCase()) ||
-            item.cause.toLowerCase().includes(searchText.toLowerCase()) ||
-            item.solution.toLowerCase().includes(searchText.toLowerCase())
-        );
-    });
+    const SearchForecast =
+        forecast.length > 0 &&
+        forecast.filter((item) => {
+            return (
+                item.name.toLowerCase().includes(searchText.toLowerCase()) ||
+                item.disease.toLowerCase().includes(searchText.toLowerCase()) ||
+                item.cause.toLowerCase().includes(searchText.toLowerCase()) ||
+                item.solution.toLowerCase().includes(searchText.toLowerCase())
+            );
+        });
+    // Sử dụng SearchForecast ở đây
+
+    // Hoặc có thể thêm điều kiện kiểm tra forecast rỗng
+    if (!SearchForecast) {
+        // Xử lý khi SearchForecast rỗng
+    }
+
     return (
         <View style={styles.body}>
             <View style={styles.search_header}>
@@ -170,7 +179,7 @@ const styles = StyleSheet.create({
     search_text: {
         marginLeft: 10,
         fontSize: 17,
-        color: '#00000',
+        color: '#0000',
         width: '80%',
     },
     search_list: {

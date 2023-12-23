@@ -32,20 +32,25 @@ const ContentHomeItem = ({ navigation }: any) => {
     }, []);
 
     // Hàm xóa item
-    const deleteItem = (id) => {
-        axios
-            .delete(`https://6570239c09586eff6640c60f.mockapi.io/forecast/${id}`)
-            .then((response) => {
-                if (response.status === 200) {
-                    // Item deleted successfully
-                    console.log('Item deleted:', id);
-                    navigation.navigate('HistoryStack');
-                    // Add any additional logic you need after a successful deletion
-                } else {
-                    alert('Xóa mục không thành công');
-                }
-            })
-            .catch((error) => console.error('Error deleting item:', error));
+    const deleteItem = async (id) => {
+        console.log('id: ', id);
+        try {
+            const response = await axios.delete(
+                `https://pbl4-h-th-ng-th-ng-minh.onrender.com/api/pbl4/forecasts/delete/${data.id}`
+            );
+
+            if (response.status === 200) {
+                // Item deleted successfully
+                console.log('Item deleted:', id);
+                // Add any additional logic you need after a successful deletion
+            } else {
+                console.error('Error deleting item. Unexpected status:', response.status);
+                alert('Xóa mục không thành công');
+            }
+        } catch (error) {
+            console.error('Error deleting item:', error.message);
+            alert('Xóa mục không thành công');
+        }
     };
     return (
         <View style={styles.container}>

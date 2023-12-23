@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const ContentPBL = ({ navigation }) => {
     const handleTest = async () => {
-        const url = 'http://localhost:8088/api/user';
+        const url = 'https://pbl4-h-th-ng-th-ng-minh.onrender.com/api/pbl4/forecasts';
         try {
             console.log(url);
             const response = await axios.get(url);

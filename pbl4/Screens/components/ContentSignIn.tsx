@@ -88,7 +88,7 @@ const ContentSignIn = ({ title, navigation }: ContentSingInProps) => {
         }
         formData.password === '' ? setErrorPass('Pass không để rỗng') : setErrorPass('');
         if (checkEmail === true && formData.password !== '') {
-            checkLogin(email, password, setEmail, setPassword, navigation);
+            checkLogin(email, password, setEmail, setErrorPass, navigation);
         } else {
             Alert.alert('Nhap lai!!!');
         }

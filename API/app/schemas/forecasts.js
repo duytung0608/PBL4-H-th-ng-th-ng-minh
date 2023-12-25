@@ -9,4 +9,4 @@ var schema = new mongoose.Schema({
     cause: String,
     solution: String,
 });
-module.exports = mongoose.model(databaseConfig.col_items, schema);
+module.exports = mongoose.model(databaseConfig.col_items[1], schema);

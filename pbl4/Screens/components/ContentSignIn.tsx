@@ -47,16 +47,29 @@ const ContentSignIn = ({ title, navigation }: ContentSingInProps) => {
             Alert.alert('Đã xảy ra lỗi khi kiểm tra đăng nhập. Vui lòng thử lại sau!');
         }
     };
-    const handelLogin = async () => {
+    const handleLogin = async () => {
         try {
-            const response = await user.login({ username: email, password });
-            console.log('username = ', email);
-            console.log('password = ', password);
+            // Gửi yêu cầu đăng nhập trực tiếp thông qua API
+            const response = await axios.post('https://pbl4-h-th-ng-th-ng-minh.onrender.com/api/pbl4/accounts', {
+                username: email,
+                password: password,
+            });
 
-            navigation.navigate('BottomTabs', { user: response.user });
+            // Lấy thông tin người dùng từ phản hồi API
+            const loggedInUser = response.data.user;
+
+            // Kiểm tra nếu có thông tin người dùng hợp lệ
+            if (loggedInUser) {
+                console.log('Login successful for user:', loggedInUser);
+                navigation.navigate('BottomTabs', { user: loggedInUser });
+            } else {
+                // Xử lý trường hợp không có thông tin người dùng hợp lệ từ API
+                console.error('Invalid user data received from the server');
+                alert('Invalid user data received from the server');
+            }
         } catch (error) {
             if (error.response && error.response.status) {
-                // Kiểm tra có phản hồi từ server hay không
+                // Xử lý các trường hợp lỗi từ phản hồi server
                 if (error.response.status === 404) {
                     alert('Account not found');
                 } else if (error.response.status === 401) {
@@ -66,7 +79,7 @@ const ContentSignIn = ({ title, navigation }: ContentSingInProps) => {
                     alert('Server error');
                 }
             } else {
-                // Không có phản hồi từ server, xử lý lỗi khác
+                // Xử lý các trường hợp lỗi khác
                 console.error('Error:', error.message);
                 alert('An unexpected error occurred');
             }
@@ -88,7 +101,8 @@ const ContentSignIn = ({ title, navigation }: ContentSingInProps) => {
         }
         formData.password === '' ? setErrorPass('Pass không để rỗng') : setErrorPass('');
         if (checkEmail === true && formData.password !== '') {
-            checkLogin(email, password, setEmail, setErrorPass, navigation);
+            // checkLogin(email, password, setEmail, setErrorPass, navigation);
+            handleLogin();
         } else {
             Alert.alert('Nhap lai!!!');
         }

@@ -7,4 +7,4 @@ var schema = new mongoose.Schema({
     name: String,
     phone: String,
 });
-module.exports = mongoose.model(databaseConfig.col_items, schema);
+module.exports = mongoose.model(databaseConfig.col_items[0], schema);

@@ -20,17 +20,25 @@ const ContentSignIn = ({ title, navigation }: ContentSingInProps) => {
 
     const checkLogin = async (email, password, setCheckEmail, setErrorPass, navigation) => {
         let formData = {
-            email: email,
+            username: email,
             password: password,
         };
 
         try {
             // Gửi yêu cầu để kiểm tra đăng nhập từ API
-            const response = await axios.post('https://pbl4-h-th-ng-th-ng-minh.onrender.com/api/pbl4/accounts/login', {
-                email: email,
-                password: password,
-            });
-            console.log('username = ', formData.email);
+            const response = await axios.post(
+                'https://pbl4-h-th-ng-th-ng-minh.onrender.com/api/pbl4/accounts/login',
+                {
+                    username: email,
+                    password: password,
+                },
+                {
+                    headers: {
+                        'Content-type': 'application/json',
+                    },
+                }
+            );
+            console.log('username = ', formData.username);
             console.log('password = ', formData.password);
             // Kiểm tra xem có thông tin tài khoản trùng khớp hay không
             if (response.data.length > 0) {

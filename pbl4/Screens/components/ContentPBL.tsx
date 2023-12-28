@@ -47,9 +47,6 @@ const ContentPBL = ({ navigation }) => {
                         <Text style={{ fontSize: 20, fontWeight: 'bold' }}> Login</Text>
                     </TouchableOpacity>
                 </View>
-                <TouchableOpacity onPress={handleTest}>
-                    <Text>Test BTN</Text>
-                </TouchableOpacity>
             </View>
         </>
     );

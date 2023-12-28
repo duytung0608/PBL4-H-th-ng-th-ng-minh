@@ -76,7 +76,7 @@ router.post('/login', async (req, res, next) => {
         const { username, password } = req.body;
 
         // Tìm user trong cơ sở dữ liệu với username
-        const account = await MainModel.listAccounts({ username: req.params.username }, { task: 'one' });
+        const account = await MainModel.listAccounts({ username: username }, { task: 'one' });
 
         // Kiểm tra xem user có tồn tại không
         if (!account) {

@@ -3,10 +3,19 @@ import React, { useState } from 'react';
 const ContentProfile = ({ navigation }) => {
     const [isEditable, setIsEditable] = useState(false);
     const [text, setText] = useState('');
+    const [name, setName] = useState('');
+    const [phone, setPhone] = useState('');
+
     const handleButtonClick = () => {
-        // Đảo ngược trạng thái editable
-        setIsEditable(!isEditable);
+        if (isEditable) {
+            // Nếu đang ở trạng thái editable, thực hiện hàm updateAccount
+            updateAccount();
+        } else {
+            // Nếu không ở trạng thái editable, đảo ngược trạng thái
+            setIsEditable(!isEditable);
+        }
     };
+    const updateAccount = () => {};
     const handleLogout = () => {
         console.log('User has clicked the logout button.');
         // Delete token here
@@ -16,39 +25,43 @@ const ContentProfile = ({ navigation }) => {
     return (
         <View style={styles.body}>
             <Image style={styles.avt_img} source={require('../../assets/IMG_PBL/avtProfile.png')} />
-            <Text style={styles.name}>Ten Account</Text>
+            <Text style={styles.name}>Ngoc Quyen</Text>
             <View style={styles.profile}>
                 <View style={styles.profile_item}>
                     <Text style={styles.item_lb}>Name</Text>
                     <TextInput
                         style={styles.item_input}
-                        placeholder="Name Account"
+                        placeholder="Ngoc Quyen"
                         multiline={false} // Chỉ cho phép nhập trên 1 dòng
                         numberOfLines={1} // Số dòng tối đa là 1
                         editable={isEditable}
+                        onChangeText={(value: string) => setName(value)} // Ensure that value is of type string
+                        value={name}
                     />
                 </View>
                 <View style={styles.profile_item}>
                     <Text style={styles.item_lb}>Email</Text>
                     <TextInput
                         style={styles.item_input}
-                        placeholder="Email Account"
+                        placeholder="quyen@gmail.com"
                         multiline={false} // Chỉ cho phép nhập trên 1 dòng
                         numberOfLines={1} // Số dòng tối đa là 1
-                        editable={isEditable}
+                        editable={false}
                     />
                 </View>
                 <View style={styles.profile_item}>
                     <Text style={styles.item_lb}>Phone</Text>
                     <TextInput
                         style={styles.item_input}
-                        placeholder="Phone Account"
+                        placeholder="0382106557"
                         multiline={false} // Chỉ cho phép nhập trên 1 dòng
                         numberOfLines={1} // Số dòng tối đa là 1
                         editable={isEditable}
+                        onChangeText={(value: string) => setPhone(value)} // Ensure that value is of type string
+                        value={phone}
                     />
                 </View>
-                <View style={styles.profile_item}>
+                {/* <View style={styles.profile_item}>
                     <Text style={styles.item_lb}>Address</Text>
                     <TextInput
                         style={styles.item_input}
@@ -57,7 +70,7 @@ const ContentProfile = ({ navigation }) => {
                         numberOfLines={1} // Số dòng tối đa là 1
                         editable={isEditable}
                     />
-                </View>
+                </View> */}
             </View>
 
             <View style={styles.btn_profile}>

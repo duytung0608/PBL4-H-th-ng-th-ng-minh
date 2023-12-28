@@ -5,11 +5,11 @@ import axios from 'axios';
 
 const ContentPBL = ({ navigation }) => {
     const handleTest = async () => {
-        const url = 'https://pbl4-h-th-ng-th-ng-minh.onrender.com/api/pbl4/forecasts';
+        const url = 'https://pbl4-h-th-ng-th-ng-minh.onrender.com/api/pbl4/accounts';
         try {
             console.log(url);
             const response = await axios.get(url);
-            console.log('2');
+            console.log('API co du lieu');
         } catch (error) {
             console.error('[ERR]: ', error.message);
         }
@@ -37,7 +37,7 @@ const ContentPBL = ({ navigation }) => {
                     </Text>
                 </View>
                 <View>
-                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CreateAccount')}>
+                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('BottomTabs')}>
                         <Text style={styles.btnText}>Bắt đầu</Text>
                     </TouchableOpacity>
                 </View>

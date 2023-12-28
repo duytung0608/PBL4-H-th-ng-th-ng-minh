@@ -71,14 +71,31 @@ router.delete('/delete/:username', async (req, res, next) => {
     }
 });
 
-router.get('/get/hello', async (req, res, next) => {
+router.post('/login', async (req, res, next) => {
     try {
-        console.log('TEST');
+        const { username, password } = req.body;
+
+        // Tìm user trong cơ sở dữ liệu với username
+        const account = await MainModel.listAccounts({ username: req.params.username }, { task: 'one' });
+
+        // Kiểm tra xem user có tồn tại không
+        if (!account) {
+            return res.status(401).json({ success: false, message: 'Username không tồn tại' });
+        }
+
+        // So sánh mật khẩu nhập vào với mật khẩu đã lưu trong cơ sở dữ liệu
+        const isPasswordValid = await bcrypt.compare(password, account.password);
+
+        // Kiểm tra xem mật khẩu có đúng không
+        if (!isPasswordValid) {
+            return res.status(401).json({ success: false, message: 'Mật khẩu không đúng' });
+        }
+
+        res.status(200).json({ success: true, message: 'Đăng nhập thành công' });
     } catch (error) {
-        throw error;
+        res.status(500).json({ success: false, message: 'Lỗi server' });
     }
 });
-
 module.exports = router;
 
 makeId = (number) => {

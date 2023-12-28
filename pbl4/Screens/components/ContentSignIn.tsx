@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, SafeAreaView, TouchableOpacity, TextInput, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
-import { user } from '../../repositories';
+import User from '../../repositories/user';
 // import { FIREBASE_AUTH } from "../../firebase";
 // import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
@@ -26,13 +26,12 @@ const ContentSignIn = ({ title, navigation }: ContentSingInProps) => {
 
         try {
             // Gửi yêu cầu để kiểm tra đăng nhập từ API
-            const response = await axios.get('https://6570239c09586eff6640c60f.mockapi.io/account', {
-                params: {
-                    email: formData.email,
-                    password: formData.password,
-                },
+            const response = await axios.post('https://pbl4-h-th-ng-th-ng-minh.onrender.com/api/pbl4/accounts/login', {
+                email: email,
+                password: password,
             });
-
+            console.log('username = ', formData.email);
+            console.log('password = ', formData.password);
             // Kiểm tra xem có thông tin tài khoản trùng khớp hay không
             if (response.data.length > 0) {
                 // Đăng nhập thành công, chuyển đến trang BottomTabs
@@ -47,64 +46,49 @@ const ContentSignIn = ({ title, navigation }: ContentSingInProps) => {
             Alert.alert('Đã xảy ra lỗi khi kiểm tra đăng nhập. Vui lòng thử lại sau!');
         }
     };
-    const handleLogin = async () => {
+    const handleLogin = async (username, password, navigation) => {
         try {
-            // Gửi yêu cầu đăng nhập trực tiếp thông qua API
-            const response = await axios.post('https://pbl4-h-th-ng-th-ng-minh.onrender.com/api/pbl4/accounts', {
-                username: email,
+            // Gửi yêu cầu để kiểm tra đăng nhập từ API
+            const apiResponse = await axios.post('https://pbl4-h-th-ng-th-ng-minh.onrender.com/api/pbl4/accounts', {
+                username: username,
                 password: password,
             });
 
-            // Lấy thông tin người dùng từ phản hồi API
-            const loggedInUser = response.data.user;
-
-            // Kiểm tra nếu có thông tin người dùng hợp lệ
-            if (loggedInUser) {
-                console.log('Login successful for user:', loggedInUser);
-                navigation.navigate('BottomTabs', { user: loggedInUser });
+            // Kiểm tra xem có thông tin tài khoản trùng khớp hay không
+            if (apiResponse.data.success) {
+                // Đăng nhập thành công, chuyển đến trang BottomTabs và gửi thông tin người dùng
+                navigation.navigate('BottomTabs', { user: apiResponse.data.user });
             } else {
-                // Xử lý trường hợp không có thông tin người dùng hợp lệ từ API
-                console.error('Invalid user data received from the server');
-                alert('Invalid user data received from the server');
+                // Tài khoản không hợp lệ
+                alert('Tài khoản hoặc mật khẩu không đúng. Vui lòng kiểm tra lại!');
             }
         } catch (error) {
-            if (error.response && error.response.status) {
-                // Xử lý các trường hợp lỗi từ phản hồi server
-                if (error.response.status === 404) {
-                    alert('Account not found');
-                } else if (error.response.status === 401) {
-                    alert('Incorrect password');
-                } else {
-                    console.error('Server error:', error.response.status, error.response.data);
-                    alert('Server error');
-                }
-            } else {
-                // Xử lý các trường hợp lỗi khác
-                console.error('Error:', error.message);
-                alert('An unexpected error occurred');
-            }
+            console.error(error);
+            // Xử lý lỗi từ server hoặc lỗi khi gọi API
+            Alert.alert('Đã xảy ra lỗi khi kiểm tra đăng nhập. Vui lòng thử lại sau!');
         }
     };
     const onSubmit = () => {
         let formData = {
-            email: email,
+            username: email,
             password: password,
         };
 
         let regexEmail = new RegExp(
             '(?:[a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*|"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])'
         );
-        if (!regexEmail.test(formData.email)) {
+        if (!regexEmail.test(formData.username)) {
             setCheckEmail(false);
         } else {
             setCheckEmail(true);
         }
         formData.password === '' ? setErrorPass('Pass không để rỗng') : setErrorPass('');
         if (checkEmail === true && formData.password !== '') {
-            // checkLogin(email, password, setEmail, setErrorPass, navigation);
-            handleLogin();
+            checkLogin(email, password, setEmail, setErrorPass, navigation);
+            // handleLogin(email, password, navigation);
         } else {
             Alert.alert('Nhap lai!!!');
+            navigation.navigate('SignIn');
         }
     };
 

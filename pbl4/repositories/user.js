@@ -1,51 +1,19 @@
-import axios from 'axios';
-const apiUrl = 'http://localhost:3000';
-const getUserDetail = async (token) => {};
+// user.js
 
-const login = async ({ username, password }) => {
-    try {
-        const response = await axios.post(
-            `${apiUrl}/api/pbl4/accounts/login`,
-            {
-                username,
-                password,
-            },
-            {
-                headers: { 'Content-Type': 'application/json' },
-            }
-        );
-        if (response && response.data) {
+import axios from 'axios';
+
+const API_URL = 'https://pbl4-h-th-ng-th-ng-minh.onrender.com/api/pbl4/accounts';
+
+const User = {
+    login: async (username, password) => {
+        try {
+            const response = await axios.post(`${API_URL}/login`, { username, password });
             return response.data;
-        } else {
-            throw new Error('Invalid response format');
-        }
-    } catch (error) {
-        if (error.response) {
-            console.error('Server error:', error.response.status, error.response.data);
-            throw new Error('Server error');
-        } else if (error.request) {
-            console.error('No response from server');
-            throw new Error('No response from server');
-        } else {
-            console.error('Request error:', error.message);
+        } catch (error) {
             throw error;
         }
-    }
+    },
+    // Các hàm khác liên quan đến người dùng có thể được thêm ở đây
 };
 
-const register = async (newAccount) => {
-    try {
-        const response = await axios.post(`${apiUrl}/api/pbl4/accounts/register/`, newAccount, {
-            headers: { 'Content-Type': 'application/json' },
-        });
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-};
-
-export default {
-    getUserDetail,
-    login,
-    register,
-};
+export default User;
